@@ -24,10 +24,6 @@
     "title": "মহীয়সী নারী"
   },
   {
-    "id": "alim_jibon",
-    "title": "আলিমদের জীবনী"
-  },
-  {
     "id": "quraner_golpo",
     "title": "কুরআনের গল্প"
   },
@@ -44,10 +40,6 @@
     "title": "প্রাচীন আরব"
   },
   {
-    "id": "akhlaq_charitra",
-    "title": "আখলাক ও চরিত্র"
-  },
-  {
     "id": "tawba_golpo",
     "title": "তওবার গল্প"
   },
@@ -62,9 +54,5 @@
   {
     "id": "fereshta_golpo",
     "title": "ফেরেশতাদের গল্প"
-  },
-  {
-    "id": "islami_bijoy",
-    "title": "ইসলামিক বিজয়"
   }
 ]
