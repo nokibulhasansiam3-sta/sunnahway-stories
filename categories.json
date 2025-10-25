@@ -1,23 +1,23 @@
 [
   {
     "id": "nobider_jibon_theke",
-    "title": "নবীগণের জীবন থেকে"
+    "title": "নবীদের জীবন"
   },
   {
     "id": "sahabider_jibon_theke",
-    "title": "সাহাবীদের জীবন থেকে"
+    "title": "সাহাবীদের জীবন"
   },
   {
     "id": "khulafa_jibon",
-    "title": "খলিফাদের জীবনী"
+    "title": "খলিফাদের জীবন"
   },
   {
     "id": "imam_jibon",
-    "title": "ইমামদের জীবনী"
+    "title": "ইমামদের জীবন"
   },
   {
     "id": "mujahid_jibon",
-    "title": "মুজাহিদদের জীবনী"
+    "title": "মুজাহিদদের জীবন"
   },
   {
     "id": "mohiyoshi_nari",
@@ -33,7 +33,7 @@
   },
   {
     "id": "itihasher_golpo",
-    "title": "ইসলামের ইতিহাস"
+    "title": "ইসলামিক ইতিহাস"
   },
   {
     "id": "prachin_arob",
@@ -41,11 +41,11 @@
   },
   {
     "id": "tawba_golpo",
-    "title": "তওবার গল্প"
+    "title": "তওবা ও ক্ষমা"
   },
   {
     "id": "dua_zikir",
-    "title": "দোয়া ও যিকির"
+    "title": "দোয়া ও মুনাজাত"
   },
   {
     "id": "jannat_jahannam",
@@ -53,6 +53,6 @@
   },
   {
     "id": "fereshta_golpo",
-    "title": "ফেরেশতাদের গল্প"
+    "title": "ফেরেশতাদের কথা"
   }
 ]
