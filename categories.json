@@ -1,15 +1,31 @@
 [
   {
-    "id": "prachin_arob",
-    "title": "প্রাচীন আরব"
-  },
-  {
     "id": "nobider_jibon_theke",
-    "title": "নবীগণের জীবন থেকে"
+    "title": "নবীগণের জীবন"
   },
   {
     "id": "sahabider_jibon_theke",
-    "title": "সাহাবীদের জীবন থেকে"
+    "title": "সাহাবীদের জীবন"
+  },
+  {
+    "id": "khulafa_jibon",
+    "title": "খলিফাদের জীবনী"
+  },
+  {
+    "id": "imam_jibon",
+    "title": "ইমামদের জীবনী"
+  },
+  {
+    "id": "mujahid_jibon",
+    "title": "মুজাহিদদের জীবনী"
+  },
+  {
+    "id": "mohiyoshi_nari",
+    "title": "মহীয়সী নারী"
+  },
+  {
+    "id": "alim_jibon",
+    "title": "আলিমদের জীবনী"
   },
   {
     "id": "quraner_golpo",
@@ -21,10 +37,34 @@
   },
   {
     "id": "itihasher_golpo",
-    "title": "ইতিহাসের গল্প"
+    "title": "ইসলামের ইতিহাস"
   },
   {
-    "id": "mohiyoshi_nari",
-    "title": "মহীয়সী নারী"
+    "id": "prachin_arob",
+    "title": "প্রাচীন আরব"
+  },
+  {
+    "id": "akhlaq_charitra",
+    "title": "আখলাক ও চরিত্র"
+  },
+  {
+    "id": "tawba_golpo",
+    "title": "তওবার গল্প"
+  },
+  {
+    "id": "dua_zikir",
+    "title": "দোয়া ও যিকির"
+  },
+  {
+    "id": "jannat_jahannam",
+    "title": "জান্নাত ও জাহান্নাম"
+  },
+  {
+    "id": "fereshta_golpo",
+    "title": "ফেরেশতাদের গল্প"
+  },
+  {
+    "id": "islami_bijoy",
+    "title": "ইসলামিক বিজয়"
   }
 ]
