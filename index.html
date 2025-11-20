@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SunnahWay Stories - ইসলামিক গল্পের ভাণ্ডার</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;600;700&family=Amiri:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2c5f2d;
+            --primary-light: #4a8f4c;
+            --secondary: #d4af37;
+            --bg-light: #f8f9fa;
+            --text-dark: #1a1a1a;
+            --text-muted: #6c757d;
+            --border: #e0e0e0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text-dark);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+
+        .category-card h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .category-count {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Stories Grid */
+        .stories-section {
+            display: none;
+        }
+
+        .stories-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .back-button:hover {
+            background: var(--primary-light);
+            transform: translateX(-4px);
+        }
+
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .story-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .story-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .story-card h4 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .story-summary {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .story-source {
+            color: var(--secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: 'Amiri', serif;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 2rem;
+            border-radius: 20px 20px 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-body p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.4rem;
+            text-align: center;
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            direction: rtl;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .moral-box {
+            background: linear-gradient(135deg, #fff5e6, #ffe6cc);
+            border-left: 4px solid var(--secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .moral-box h4 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .close-modal {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        .close-modal:hover {
+            background: var(--primary-light);
+        }
+
+        /* Search */
+        .search-box {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(44, 95, 45, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .category-grid,
+            .stories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>🌙 SunnahWay Stories</h1>
+            <p>ইসলামিক গল্পের ভাণ্ডার - কুরআন ও হাদিসের আলোকে</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="categoriesSection">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 গল্প খুঁজুন...">
+            </div>
+            <div class="category-grid" id="categoryGrid"></div>
+        </div>
+
+        <div id="storiesSection" class="stories-section">
+            <button class="back-button" onclick="showCategories()">← ক্যাটাগরিতে ফিরে যান</button>
+            <h2 id="categoryTitle" style="color: var(--primary); margin-bottom: 2rem; font-size: 2rem;"></h2>
+            <div class="stories-grid" id="storiesGrid"></div>
+        </div>
+    </div>
+
+    <div id="storyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <p id="modalSource" style="opacity: 0.9; margin-top: 0.5rem;"></p>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div style="padding: 0 2rem 2rem;">
+                <button class="close-modal" onclick="closeModal()">বন্ধ করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let categories = [];
+        let allStories = {};
+
+        // Load categories
+        async function loadCategories() {
+            try {
+                const response = await fetch('/api/categories');
+                categories = await response.json();
+                displayCategories();
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
+        // Display categories
+        function displayCategories() {
+            const grid = document.getElementById('categoryGrid');
+            grid.innerHTML = categories.map(cat => `
+                <div class="category-card" onclick="loadCategory('${cat.id}', '${cat.title}')">
+                    <h3>${cat.title}</h3>
+                    <p class="category-count" id="count-${cat.id}">লোড হচ্ছে...</p>
+                </div>
+            `).join('');
+
+            // Load story counts
+            categories.forEach(async cat => {
+                try {
+                    const response = await fetch(`/api/stories/${cat.id}`);
+                    const stories = await response.json();
+                    allStories[cat.id] = stories;
+                    document.getElementById(`count-${cat.id}`).textContent = `${stories.length}টি গল্প`;
+                } catch (error) {
+                    document.getElementById(`count-${cat.id}`).textContent = 'ডেটা পাওয়া যায়নি';
+                }
+            });
+        }
+
+        // Load category stories
+        async function loadCategory(categoryId, categoryTitle) {
+            document.getElementById('categoriesSection').style.display = 'none';
+            document.getElementById('storiesSection').classList.add('active');
+            document.getElementById('categoryTitle').textContent = categoryTitle;
+
+            const grid = document.getElementById('storiesGrid');
+
+            if (allStories[categoryId]) {
+                displayStories(allStories[categoryId]);
+            } else {
+                grid.innerHTML = '<div class="loading"><div class="spinner"></div><p>লোড হচ্ছে...</p></div>';
+                try {
+                    const response = await fetch(`/api/stories/${categoryId}`);
+                    const stories = await response.json();
+                    allStories[categoryId] = stories;
+                    displayStories(stories);
+                } catch (error) {
+                    grid.innerHTML = '<div class="loading"><p>গল্প লোড করতে সমস্যা হয়েছে</p></div>';
+                }
+            }
+        }
+
+        // Display stories
+        function displayStories(stories) {
+            const grid = document.getElementById('storiesGrid');
+            grid.innerHTML = stories.map(story => `
+                <div class="story-card" onclick='showStory(${JSON.stringify(story).replace(/'/g, "&apos;")})'>
+                    <h4>${story.title}</h4>
+                    <p class="story-summary">${story.summary || ''}</p>
+                    <p class="story-source">${story.source || ''}</p>
+                </div>
+            `).join('');
+        }
+
+        // Show story modal
+        function showStory(story) {
+            document.getElementById('modalTitle').textContent = story.title;
+            document.getElementById('modalSource').textContent = story.source || '';
+
+            let bodyHTML = '';
+
+            if (story.paragraphs && story.paragraphs.length > 0) {
+                bodyHTML = story.paragraphs.map(para => {
+                    // Check if it's Arabic text
+                    if (/[\u0600-\u06FF]/.test(para) && para.length > 50) {
+                        return `<div class="arabic-text">${para}</div>`;
+                    }
+                    return `<p>${para}</p>`;
+                }).join('');
+            }
+
+            if (story.moral) {
+                bodyHTML += `
+                    <div class="moral-box">
+                        <h4>📖 শিক্ষা</h4>
+                        <p>${story.moral}</p>
+                    </div>
+                `;
+            }
+
+            document.getElementById('modalBody').innerHTML = bodyHTML;
+            document.getElementById('storyModal').classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('storyModal').classList.remove('active');
+        }
+
+        // Show categories
+        function showCategories() {
+            document.getElementById('categoriesSection').style.display = 'block';
+            document.getElementById('storiesSection').classList.remove('active');
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.category-card');
+
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                if (title.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Close modal on outside click
+        document.getElementById('storyModal').addEventListener('click', (e) => {
+            if (e.target.id === 'storyModal') {
+                closeModal();
+            }
+        });
+
+        // Initialize
+        loadCategories();
+    </script>
+</body>
+
+</html>
