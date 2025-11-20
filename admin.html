@@ -669,6 +669,31 @@
             }
         }
 
+        // Toggle all preview boxes
+        let previewsVisible = true;
+        function toggleAllPreviews() {
+            previewsVisible = !previewsVisible;
+            const previews = document.querySelectorAll('.preview-box, .preview-label');
+            const icon = document.getElementById('previewToggleIcon');
+            const text = document.getElementById('previewToggleText');
+
+            previews.forEach(preview => {
+                if (previewsVisible) {
+                    preview.classList.remove('hidden');
+                } else {
+                    preview.classList.add('hidden');
+                }
+            });
+
+            if (previewsVisible) {
+                icon.className = 'bi bi-eye';
+                text.textContent = 'Preview Hide';
+            } else {
+                icon.className = 'bi bi-eye-slash';
+                text.textContent = 'Preview Show';
+            }
+        }
+
         // Initialize
         loadCategories();
     </script>
