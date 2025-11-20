@@ -110,6 +110,11 @@
             min-height: 60px;
             font-family: 'Noto Sans Bengali', sans-serif;
             line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .preview-box.hidden {
+            display: none;
         }
 
         .preview-box strong {
@@ -121,6 +126,15 @@
             font-size: 0.85rem;
             color: #6c757d;
             margin-bottom: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .preview-label.hidden {
+            display: none;
+        }
+
+        .toggle-preview-btn {
+            margin-left: 0.5rem;
         }
     </style>
 </head>
@@ -130,10 +144,14 @@
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3 col-lg-2 sidebar p-0">
-                <h4><i class="bi bi-book-half me-2"></i>SunnahWay Admin</h4>
+                <h4><i class="bi bi-book-half me-2"></i>SunnahWay জীবনী ও গল্প</h4>
                 <div class="p-3">
                     <button class="btn btn-light w-100 mb-3" onclick="showAddCategoryModal()">
                         <i class="bi bi-plus-circle me-2"></i>নতুন ক্যাটাগরি
+                    </button>
+                    <button class="btn btn-outline-light w-100 mb-2" onclick="toggleAllPreviews()">
+                        <i class="bi bi-eye" id="previewToggleIcon"></i>
+                        <span id="previewToggleText">Preview Hide</span>
                     </button>
                 </div>
                 <div id="categoryList"></div>
