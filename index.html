@@ -407,6 +407,10 @@
         <div class="header-content">
             <h1>🌙 SunnahWay Stories</h1>
             <p>ইসলামিক গল্পের ভাণ্ডার - কুরআন ও হাদিসের আলোকে</p>
+            <button onclick="forceRefresh()"
+                style="margin-top: 1rem; padding: 0.5rem 1.5rem; background: rgba(255,255,255,0.2); border: 2px solid white; border-radius: 8px; color: white; cursor: pointer; font-family: 'Hind Siliguri', sans-serif; font-size: 0.9rem; transition: all 0.3s ease;">
+                <i style="margin-right: 0.5rem;">🔄</i> নতুন আপডেট লোড করুন
+            </button>
         </div>
     </header>
 
@@ -441,11 +445,14 @@
     <script>
         let categories = [];
         let allStories = {};
+        const APP_VERSION = Date.now(); // Cache buster
 
         // Load categories
         async function loadCategories() {
             try {
-                const response = await fetch('/api/categories');
+                const response = await fetch(`/api/categories?v=${APP_VERSION}`, {
+                    cache: 'no-cache'
+                });
                 categories = await response.json();
                 displayCategories();
             } catch (error) {
@@ -466,7 +473,9 @@
             // Load story counts
             categories.forEach(async cat => {
                 try {
-                    const response = await fetch(`/api/stories/${cat.id}`);
+                    const response = await fetch(`/api/stories/${cat.id}?v=${APP_VERSION}`, {
+                        cache: 'no-cache'
+                    });
                     const stories = await response.json();
                     allStories[cat.id] = stories;
                     document.getElementById(`count-${cat.id}`).textContent = `${stories.length}টি গল্প`;
@@ -489,7 +498,9 @@
             } else {
                 grid.innerHTML = '<div class="loading"><div class="spinner"></div><p>লোড হচ্ছে...</p></div>';
                 try {
-                    const response = await fetch(`/api/stories/${categoryId}`);
+                    const response = await fetch(`/api/stories/${categoryId}?v=${APP_VERSION}`, {
+                        cache: 'no-cache'
+                    });
                     const stories = await response.json();
                     allStories[categoryId] = stories;
                     displayStories(stories);
@@ -579,6 +590,14 @@
                 closeModal();
             }
         });
+
+        // Force refresh to get latest data
+        function forceRefresh() {
+            // Clear all cached data
+            allStories = {};
+            // Reload the page with cache bypass
+            window.location.reload(true);
+        }
 
         // Initialize
         loadCategories();
