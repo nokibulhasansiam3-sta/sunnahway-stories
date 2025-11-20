@@ -186,6 +186,10 @@
                                 onclick="makeBoldField('storySummary')">
                                 <i class="bi bi-type-bold"></i> Bold
                             </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                onclick="removeBoldField('storySummary')">
+                                <i class="bi bi-eraser"></i> Remove Bold
+                            </button>
                         </div>
                         <textarea class="form-control" id="storySummary"
                             oninput="updatePreview('storySummary', 'summaryPreview')"
@@ -201,11 +205,15 @@
                                 title="Select text and click to make it bold">
                                 <i class="bi bi-type-bold"></i> Bold
                             </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                onclick="removeBoldField('storyParagraphs')">
+                                <i class="bi bi-eraser"></i> Remove Bold
+                            </button>
                             <small class="text-muted ms-2">💡 টেক্সট সিলেক্ট করে Bold বাটনে ক্লিক করুন</small>
                         </div>
                         <textarea class="form-control" id="storyParagraphs" rows="15"
                             oninput="updatePreview('storyParagraphs', 'paragraphsPreview')"
-                            placeholder="প্রতিটি নতুন লাইনে একটি করে প্যারাগ্রাফ লিখুন...&#10;&#10;উদাহরণ:&#10;প্রথম প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;দ্বিতীয় প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;আরবি টেক্সট:&#10;بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"></textarea>
+                            placeholder="প্রতিটি নতুন লাইনে একটি করে প্যারাগ্রাফ লিখুন...&#10;&#10;উদাহরণ:&#10;প্রথম প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;দ্বিতীয় প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;আরবি টেক্সট:&#10;বِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"></textarea>
                         <small class="text-muted">💡 টিপস: খালি লাইন দিয়ে প্যারাগ্রাফ আলাদা করুন। আরবি টেক্সট
                             স্বয়ংক্রিয়ভাবে সনাক্ত হবে।</small>
                         <div class="preview-label mt-2">📖 Preview (কেমন দেখাবে):</div>
@@ -218,6 +226,10 @@
                             <button type="button" class="btn btn-sm btn-outline-secondary"
                                 onclick="makeBoldField('storyMoral')">
                                 <i class="bi bi-type-bold"></i> Bold
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                onclick="removeBoldField('storyMoral')">
+                                <i class="bi bi-eraser"></i> Remove Bold
                             </button>
                         </div>
                         <textarea class="form-control" id="storyMoral"
@@ -526,26 +538,74 @@
                 return;
             }
 
-            // Check if already bold
-            const beforeText = textarea.value.substring(Math.max(0, start - 2), start);
-            const afterText = textarea.value.substring(end, Math.min(textarea.value.length, end + 2));
-
-            if (beforeText === '**' && afterText === '**') {
-                // Remove bold
-                const newText = textarea.value.substring(0, start - 2) +
-                    selectedText +
-                    textarea.value.substring(end + 2);
-                textarea.value = newText;
-                textarea.setSelectionRange(start - 2, end - 2);
-            } else {
-                // Add bold
+            // Check if the selected text itself contains ** markers
+            if (selectedText.startsWith('**') && selectedText.endsWith('**') && selectedText.length > 4) {
+                // Remove bold from the selected text
                 const newText = textarea.value.substring(0, start) +
-                    '**' + selectedText + '**' +
+                    selectedText.substring(2, selectedText.length - 2) +
                     textarea.value.substring(end);
                 textarea.value = newText;
-                textarea.setSelectionRange(start, end + 4);
+                textarea.setSelectionRange(start, end - 4);
+            } else {
+                // Check if already surrounded by **
+                const beforeText = textarea.value.substring(Math.max(0, start - 2), start);
+                const afterText = textarea.value.substring(end, Math.min(textarea.value.length, end + 2));
+
+                if (beforeText === '**' && afterText === '**') {
+                    // Remove bold
+                    const newText = textarea.value.substring(0, start - 2) +
+                        selectedText +
+                        textarea.value.substring(end + 2);
+                    textarea.value = newText;
+                    textarea.setSelectionRange(start - 2, end - 2);
+                } else {
+                    // Add bold
+                    const newText = textarea.value.substring(0, start) +
+                        '**' + selectedText + '**' +
+                        textarea.value.substring(end);
+                    textarea.value = newText;
+                    textarea.setSelectionRange(start, end + 4);
+                }
             }
 
+            textarea.focus();
+
+            // Update preview
+            const previewMap = {
+                'storySummary': 'summaryPreview',
+                'storyParagraphs': 'paragraphsPreview',
+                'storyMoral': 'moralPreview'
+            };
+            if (previewMap[fieldId]) {
+                updatePreview(fieldId, previewMap[fieldId]);
+            }
+        }
+
+        // Remove bold from selected text
+        function removeBoldField(fieldId) {
+            const textarea = document.getElementById(fieldId);
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            let selectedText = textarea.value.substring(start, end);
+
+            if (!selectedText) {
+                Swal.fire('সতর্কতা', 'প্রথমে টেক্সট সিলেক্ট করুন', 'warning');
+                return;
+            }
+
+            // Remove all ** from selected text
+            const cleanedText = selectedText.replace(/\*\*/g, '');
+
+            if (cleanedText === selectedText) {
+                Swal.fire('তথ্য', 'সিলেক্ট করা টেক্সটে কোনো bold formatting নেই', 'info');
+                return;
+            }
+
+            const newText = textarea.value.substring(0, start) +
+                cleanedText +
+                textarea.value.substring(end);
+            textarea.value = newText;
+            textarea.setSelectionRange(start, start + cleanedText.length);
             textarea.focus();
 
             // Update preview
