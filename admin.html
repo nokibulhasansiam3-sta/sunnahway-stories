@@ -103,7 +103,7 @@
 
         .preview-box {
             background: #f8f9fa;
-            border: 1px solid #dee2e6;
+            border: 2px solid #dee2e6;
             border-radius: 8px;
             padding: 1rem;
             margin-top: 0.5rem;
@@ -111,10 +111,19 @@
             font-family: 'Noto Sans Bengali', sans-serif;
             line-height: 1.6;
             transition: all 0.3s ease;
+            cursor: text;
+            outline: none;
         }
 
-        .preview-box.hidden {
-            display: none;
+        .preview-box:hover {
+            border-color: #adb5bd;
+            background: #ffffff;
+        }
+
+        .preview-box:focus {
+            border-color: #2c5f2d;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.1);
         }
 
         .preview-box strong {
@@ -129,8 +138,9 @@
             transition: all 0.3s ease;
         }
 
-        .preview-label.hidden {
-            display: none;
+        .preview-label .edit-hint {
+            color: #2c5f2d;
+            font-weight: 600;
         }
 
         .toggle-preview-btn {
@@ -148,10 +158,6 @@
                 <div class="p-3">
                     <button class="btn btn-light w-100 mb-3" onclick="showAddCategoryModal()">
                         <i class="bi bi-plus-circle me-2"></i>নতুন ক্যাটাগরি
-                    </button>
-                    <button class="btn btn-outline-light w-100 mb-2" onclick="toggleAllPreviews()">
-                        <i class="bi bi-eye" id="previewToggleIcon"></i>
-                        <span id="previewToggleText">Preview Hide</span>
                     </button>
                 </div>
                 <div id="categoryList"></div>
@@ -210,10 +216,13 @@
                             </button>
                         </div>
                         <textarea class="form-control" id="storySummary"
-                            oninput="updatePreview('storySummary', 'summaryPreview')"
+                            oninput="updatePreview('storySummary', 'summaryPreview')" style="display: none;"
                             placeholder="গল্পের সংক্ষিপ্ত বিবরণ"></textarea>
-                        <div class="preview-label">📖 Preview (কেমন দেখাবে):</div>
-                        <div class="preview-box" id="summaryPreview">এখানে preview দেখাবে...</div>
+                        <div class="preview-label">✏️ এখানে লিখুন <span class="edit-hint">(সরাসরি edit করুন)</span>:
+                        </div>
+                        <div class="preview-box" id="summaryPreview" contenteditable="true"
+                            oninput="syncFromPreview('summaryPreview', 'storySummary')" onpaste="handlePaste(event)">
+                            এখানে লিখুন...</div>
                     </div>
 
                     <div class="mb-3">
@@ -230,12 +239,15 @@
                             <small class="text-muted ms-2">💡 টেক্সট সিলেক্ট করে Bold বাটনে ক্লিক করুন</small>
                         </div>
                         <textarea class="form-control" id="storyParagraphs" rows="15"
-                            oninput="updatePreview('storyParagraphs', 'paragraphsPreview')"
+                            oninput="updatePreview('storyParagraphs', 'paragraphsPreview')" style="display: none;"
                             placeholder="প্রতিটি নতুন লাইনে একটি করে প্যারাগ্রাফ লিখুন...&#10;&#10;উদাহরণ:&#10;প্রথম প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;দ্বিতীয় প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;আরবি টেক্সট:&#10;বِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"></textarea>
-                        <small class="text-muted">💡 টিপস: খালি লাইন দিয়ে প্যারাগ্রাফ আলাদা করুন। আরবি টেক্সট
-                            স্বয়ংক্রিয়ভাবে সনাক্ত হবে।</small>
-                        <div class="preview-label mt-2">📖 Preview (কেমন দেখাবে):</div>
-                        <div class="preview-box" id="paragraphsPreview">এখানে preview দেখাবে...</div>
+                        <small class="text-muted">💡 টিপস: Enter চাপলে নতুন প্যারাগ্রাফ হবে। Text select করে Ctrl+B
+                            চাপলে bold হবে।</small>
+                        <div class="preview-label mt-2">✏️ এখানে লিখুন <span class="edit-hint">(সরাসরি edit
+                                করুন)</span>:</div>
+                        <div class="preview-box" id="paragraphsPreview" contenteditable="true"
+                            oninput="syncFromPreview('paragraphsPreview', 'storyParagraphs')"
+                            onpaste="handlePaste(event)">এখানে লিখুন...</div>
                     </div>
 
                     <div class="mb-3">
@@ -251,10 +263,13 @@
                             </button>
                         </div>
                         <textarea class="form-control" id="storyMoral"
-                            oninput="updatePreview('storyMoral', 'moralPreview')"
+                            oninput="updatePreview('storyMoral', 'moralPreview')" style="display: none;"
                             placeholder="এই গল্প থেকে কী শিক্ষা পাওয়া যায়"></textarea>
-                        <div class="preview-label">📖 Preview (কেমন দেখাবে):</div>
-                        <div class="preview-box" id="moralPreview">এখানে preview দেখাবে...</div>
+                        <div class="preview-label">✏️ এখানে লিখুন <span class="edit-hint">(সরাসরি edit করুন)</span>:
+                        </div>
+                        <div class="preview-box" id="moralPreview" contenteditable="true"
+                            oninput="syncFromPreview('moralPreview', 'storyMoral')" onpaste="handlePaste(event)">এখানে
+                            লিখুন...</div>
                     </div>
 
                     <div class="mb-3">
