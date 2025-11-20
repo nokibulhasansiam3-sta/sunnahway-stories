@@ -212,21 +212,20 @@
                             </button>
                             <button type="button" class="btn btn-sm btn-outline-danger"
                                 onclick="removeBoldField('storySummary')">
-                                <i class="bi bi-eraser"></i> Remove Bold
+                                <i class="bi bi-eraser"></i> Unbold
                             </button>
+                            <small class="text-muted ms-2">💡 Text select করে Bold/Unbold করুন অথবা Ctrl+B চাপুন</small>
                         </div>
                         <textarea class="form-control" id="storySummary"
                             oninput="updatePreview('storySummary', 'summaryPreview')" style="display: none;"
                             placeholder="গল্পের সংক্ষিপ্ত বিবরণ"></textarea>
-                        <div class="preview-label">✏️ এখানে লিখুন <span class="edit-hint">(সরাসরি edit করুন)</span>:
-                        </div>
                         <div class="preview-box" id="summaryPreview" contenteditable="true"
                             oninput="syncFromPreview('summaryPreview', 'storySummary')" onpaste="handlePaste(event)">
                             এখানে লিখুন...</div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">প্যারাগ্রাফসমূহ (প্রতিটি লাইন = একটি প্যারাগ্রাফ)</label>
+                        <label class="form-label">মূল গল্প (প্রতিটি প্যারাগ্রাফ আলাদা লাইনে)</label>
                         <div class="mb-2">
                             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="makeBold()"
                                 title="Select text and click to make it bold">
@@ -234,20 +233,16 @@
                             </button>
                             <button type="button" class="btn btn-sm btn-outline-danger"
                                 onclick="removeBoldField('storyParagraphs')">
-                                <i class="bi bi-eraser"></i> Remove Bold
+                                <i class="bi bi-eraser"></i> Unbold
                             </button>
-                            <small class="text-muted ms-2">💡 টেক্সট সিলেক্ট করে Bold বাটনে ক্লিক করুন</small>
+                            <small class="text-muted ms-2">💡 Text select করে Bold/Unbold করুন অথবা Ctrl+B চাপুন</small>
                         </div>
                         <textarea class="form-control" id="storyParagraphs" rows="15"
                             oninput="updatePreview('storyParagraphs', 'paragraphsPreview')" style="display: none;"
-                            placeholder="প্রতিটি নতুন লাইনে একটি করে প্যারাগ্রাফ লিখুন...&#10;&#10;উদাহরণ:&#10;প্রথম প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;দ্বিতীয় প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;আরবি টেক্সট:&#10;বِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"></textarea>
-                        <small class="text-muted">💡 টিপস: Enter চাপলে নতুন প্যারাগ্রাফ হবে। Text select করে Ctrl+B
-                            চাপলে bold হবে।</small>
-                        <div class="preview-label mt-2">✏️ এখানে লিখুন <span class="edit-hint">(সরাসরি edit
-                                করুন)</span>:</div>
+                            placeholder="প্রতিটি নতুন লাইনে একটি করে প্যারাগ্রাফ লিখুন...&#10;&#10;উদাহরণ:&#10;প্রথম প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;দ্বিতীয় প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;আরবি টেক্সট:&#10;بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"></textarea>
                         <div class="preview-box" id="paragraphsPreview" contenteditable="true"
                             oninput="syncFromPreview('paragraphsPreview', 'storyParagraphs')"
-                            onpaste="handlePaste(event)">এখানে লিখুন...</div>
+                            onpaste="handlePaste(event)" style="min-height: 300px;">এখানে লিখুন...</div>
                     </div>
 
                     <div class="mb-3">
@@ -259,14 +254,13 @@
                             </button>
                             <button type="button" class="btn btn-sm btn-outline-danger"
                                 onclick="removeBoldField('storyMoral')">
-                                <i class="bi bi-eraser"></i> Remove Bold
+                                <i class="bi bi-eraser"></i> Unbold
                             </button>
+                            <small class="text-muted ms-2">💡 Text select করে Bold/Unbold করুন অথবা Ctrl+B চাপুন</small>
                         </div>
                         <textarea class="form-control" id="storyMoral"
                             oninput="updatePreview('storyMoral', 'moralPreview')" style="display: none;"
                             placeholder="এই গল্প থেকে কী শিক্ষা পাওয়া যায়"></textarea>
-                        <div class="preview-label">✏️ এখানে লিখুন <span class="edit-hint">(সরাসরি edit করুন)</span>:
-                        </div>
                         <div class="preview-box" id="moralPreview" contenteditable="true"
                             oninput="syncFromPreview('moralPreview', 'storyMoral')" onpaste="handlePaste(event)">এখানে
                             লিখুন...</div>
