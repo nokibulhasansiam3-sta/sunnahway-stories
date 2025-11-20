@@ -405,9 +405,9 @@
             document.getElementById('storySource').value = '';
 
             // Clear previews
-            document.getElementById('summaryPreview').innerHTML = 'এখানে preview দেখাবে...';
-            document.getElementById('paragraphsPreview').innerHTML = 'এখানে preview দেখাবে...';
-            document.getElementById('moralPreview').innerHTML = 'এখানে preview দেখাবে...';
+            document.getElementById('summaryPreview').innerHTML = 'এখানে লিখুন...';
+            document.getElementById('paragraphsPreview').innerHTML = 'এখানে লিখুন...';
+            document.getElementById('moralPreview').innerHTML = 'এখানে লিখুন...';
 
             new bootstrap.Modal(document.getElementById('storyModal')).show();
         }
@@ -426,7 +426,7 @@
             // Join paragraphs with newlines
             document.getElementById('storyParagraphs').value = (story.paragraphs || []).join('\n');
 
-            // Update previews
+            // Update previews with formatted content
             updatePreview('storySummary', 'summaryPreview');
             updatePreview('storyParagraphs', 'paragraphsPreview');
             updatePreview('storyMoral', 'moralPreview');
@@ -671,7 +671,7 @@
             const text = textarea.value;
 
             if (!text.trim()) {
-                preview.innerHTML = 'এখানে preview দেখাবে...';
+                preview.innerHTML = 'এখানে লিখুন...';
                 return;
             }
 
@@ -683,6 +683,52 @@
                 preview.innerHTML = formatText(text);
             }
         }
+
+        // Sync from preview box to textarea (HTML to Markdown)
+        function syncFromPreview(previewId, textareaId) {
+            const preview = document.getElementById(previewId);
+            const textarea = document.getElementById(textareaId);
+
+            // Convert HTML to markdown
+            let html = preview.innerHTML;
+
+            // Convert <strong> to **
+            html = html.replace(/<strong>(.*?)<\/strong>/g, '**$1**');
+            html = html.replace(/<b>(.*?)<\/b>/g, '**$1**');
+
+            // Convert <p> tags to newlines for paragraphs
+            if (textareaId === 'storyParagraphs') {
+                html = html.replace(/<p[^>]*>(.*?)<\/p>/g, '$1\n');
+            }
+
+            // Remove other HTML tags
+            html = html.replace(/<[^>]+>/g, '');
+
+            // Decode HTML entities
+            const txt = document.createElement('textarea');
+            txt.innerHTML = html;
+            const decoded = txt.value;
+
+            textarea.value = decoded.trim();
+        }
+
+        // Handle paste to keep only text
+        function handlePaste(event) {
+            event.preventDefault();
+            const text = (event.clipboardData || window.clipboardData).getData('text/plain');
+            document.execCommand('insertText', false, text);
+        }
+
+        // Add keyboard shortcut for bold (Ctrl+B)
+        document.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+                const activeElement = document.activeElement;
+                if (activeElement.classList.contains('preview-box') && activeElement.contentEditable === 'true') {
+                    e.preventDefault();
+                    document.execCommand('bold', false, null);
+                }
+            }
+        });
 
         // Toggle all preview boxes
         let previewsVisible = true;
