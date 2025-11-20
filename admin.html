@@ -100,6 +100,28 @@
         textarea {
             min-height: 120px;
         }
+
+        .preview-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 0.5rem;
+            min-height: 60px;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            line-height: 1.6;
+        }
+
+        .preview-box strong {
+            color: #2c5f2d;
+            font-weight: 700;
+        }
+
+        .preview-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+        }
     </style>
 </head>
 
@@ -166,7 +188,10 @@
                             </button>
                         </div>
                         <textarea class="form-control" id="storySummary"
+                            oninput="updatePreview('storySummary', 'summaryPreview')"
                             placeholder="গল্পের সংক্ষিপ্ত বিবরণ"></textarea>
+                        <div class="preview-label">📖 Preview (কেমন দেখাবে):</div>
+                        <div class="preview-box" id="summaryPreview">এখানে preview দেখাবে...</div>
                     </div>
 
                     <div class="mb-3">
@@ -179,9 +204,12 @@
                             <small class="text-muted ms-2">💡 টেক্সট সিলেক্ট করে Bold বাটনে ক্লিক করুন</small>
                         </div>
                         <textarea class="form-control" id="storyParagraphs" rows="15"
+                            oninput="updatePreview('storyParagraphs', 'paragraphsPreview')"
                             placeholder="প্রতিটি নতুন লাইনে একটি করে প্যারাগ্রাফ লিখুন...&#10;&#10;উদাহরণ:&#10;প্রথম প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;দ্বিতীয় প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;আরবি টেক্সট:&#10;بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"></textarea>
                         <small class="text-muted">💡 টিপস: খালি লাইন দিয়ে প্যারাগ্রাফ আলাদা করুন। আরবি টেক্সট
                             স্বয়ংক্রিয়ভাবে সনাক্ত হবে।</small>
+                        <div class="preview-label mt-2">📖 Preview (কেমন দেখাবে):</div>
+                        <div class="preview-box" id="paragraphsPreview">এখানে preview দেখাবে...</div>
                     </div>
 
                     <div class="mb-3">
@@ -193,7 +221,10 @@
                             </button>
                         </div>
                         <textarea class="form-control" id="storyMoral"
+                            oninput="updatePreview('storyMoral', 'moralPreview')"
                             placeholder="এই গল্প থেকে কী শিক্ষা পাওয়া যায়"></textarea>
+                        <div class="preview-label">📖 Preview (কেমন দেখাবে):</div>
+                        <div class="preview-box" id="moralPreview">এখানে preview দেখাবে...</div>
                     </div>
 
                     <div class="mb-3">
@@ -328,6 +359,11 @@
             document.getElementById('storyMoral').value = '';
             document.getElementById('storySource').value = '';
 
+            // Clear previews
+            document.getElementById('summaryPreview').innerHTML = 'এখানে preview দেখাবে...';
+            document.getElementById('paragraphsPreview').innerHTML = 'এখানে preview দেখাবে...';
+            document.getElementById('moralPreview').innerHTML = 'এখানে preview দেখাবে...';
+
             new bootstrap.Modal(document.getElementById('storyModal')).show();
         }
 
@@ -344,6 +380,11 @@
 
             // Join paragraphs with newlines
             document.getElementById('storyParagraphs').value = (story.paragraphs || []).join('\n');
+
+            // Update previews
+            updatePreview('storySummary', 'summaryPreview');
+            updatePreview('storyParagraphs', 'paragraphsPreview');
+            updatePreview('storyMoral', 'moralPreview');
 
             new bootstrap.Modal(document.getElementById('storyModal')).show();
         }
@@ -506,11 +547,48 @@
             }
 
             textarea.focus();
+
+            // Update preview
+            const previewMap = {
+                'storySummary': 'summaryPreview',
+                'storyParagraphs': 'paragraphsPreview',
+                'storyMoral': 'moralPreview'
+            };
+            if (previewMap[fieldId]) {
+                updatePreview(fieldId, previewMap[fieldId]);
+            }
         }
 
         // Make selected text bold (for paragraphs field - backward compatibility)
         function makeBold() {
             makeBoldField('storyParagraphs');
+        }
+
+        // Format text to convert markdown bold to HTML
+        function formatText(text) {
+            if (!text) return 'এখানে preview দেখাবে...';
+            // Convert **bold** to <strong>bold</strong>
+            return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        }
+
+        // Update preview box
+        function updatePreview(textareaId, previewId) {
+            const textarea = document.getElementById(textareaId);
+            const preview = document.getElementById(previewId);
+            const text = textarea.value;
+
+            if (!text.trim()) {
+                preview.innerHTML = 'এখানে preview দেখাবে...';
+                return;
+            }
+
+            // For paragraphs, show each paragraph
+            if (textareaId === 'storyParagraphs') {
+                const paragraphs = text.split('\n').filter(p => p.trim());
+                preview.innerHTML = paragraphs.map(p => `<p style="margin-bottom: 0.5rem;">${formatText(p)}</p>`).join('');
+            } else {
+                preview.innerHTML = formatText(text);
+            }
         }
 
         // Initialize
