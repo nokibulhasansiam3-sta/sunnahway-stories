@@ -5,185 +5,275 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SunnahWay Stories - Admin Panel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&display=swap"
         rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
+        :root {
+            --primary-color: #2E3192;
+            --secondary-color: #1BFFFF;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+        }
+
         body {
-            font-family: 'Noto Sans Bengali', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
             min-height: 100vh;
+            padding: 20px;
         }
 
-        .sidebar {
-            min-height: 100vh;
-            background: linear-gradient(180deg, #2c5f2d 0%, #1a3a1b 100%);
-            color: white;
-            box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+        /* Header */
+        .main-header {
+            background: var(--card-bg);
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .sidebar h4 {
-            padding: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .main-header h2 {
+            font-weight: 700;
             margin: 0;
+            color: var(--primary-color);
+            font-size: 1.5rem;
         }
 
-        .category-item {
-            padding: 1rem 1.5rem;
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             cursor: pointer;
             transition: all 0.3s ease;
-            border-left: 4px solid transparent;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
         }
 
-        .category-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-left-color: #d4af37;
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(46, 49, 146, 0.15);
+            border-color: var(--primary-color);
         }
 
-        .category-item.active {
-            background: rgba(255, 255, 255, 0.15);
-            border-left-color: #d4af37;
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary-color);
+            opacity: 0;
+            transition: 0.3s;
         }
 
-        .main-content {
-            padding: 2rem;
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .category-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .category-count {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Story List View */
+        .story-list-view {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .story-list-view.active {
+            display: block;
         }
 
         .story-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            border-left: 4px solid #d4af37;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
         }
 
         .story-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            transform: translateX(5px);
+            border-left-color: var(--primary-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .story-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .story-summary {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #2c5f2d, #4a8f4c);
+            background: var(--primary-color);
             border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: 600;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #1a3a1b, #2c5f2d);
+            background: #1a1c5e;
         }
 
-        .modal-header {
-            background: linear-gradient(135deg, #2c5f2d, #4a8f4c);
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
             color: white;
         }
 
-        .form-label {
+        /* Modal Styling */
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .modal-title {
             font-weight: 600;
-            color: #2c5f2d;
         }
 
-        .header-bar {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .story-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        textarea {
-            min-height: 120px;
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(46, 49, 146, 0.1);
         }
 
         .preview-box {
             background: #f8f9fa;
-            border: 2px solid #dee2e6;
+            border: 1px solid #e9ecef;
             border-radius: 8px;
-            padding: 1rem;
-            margin-top: 0.5rem;
-            min-height: 60px;
-            font-family: 'Noto Sans Bengali', sans-serif;
-            line-height: 1.6;
-            transition: all 0.3s ease;
-            cursor: text;
-            outline: none;
-        }
-
-        .preview-box:hover {
-            border-color: #adb5bd;
-            background: #ffffff;
+            padding: 15px;
+            min-height: 80px;
+            margin-top: 10px;
+            font-family: 'Hind Siliguri', sans-serif;
         }
 
         .preview-box:focus {
-            border-color: #2c5f2d;
-            background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.1);
+            background: white;
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 49, 146, 0.1);
         }
 
-        .preview-box strong {
-            color: #2c5f2d;
-            font-weight: 700;
-        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
 
-        .preview-label {
-            font-size: 0.85rem;
-            color: #6c757d;
-            margin-bottom: 0.25rem;
-            transition: all 0.3s ease;
-        }
-
-        .preview-label .edit-hint {
-            color: #2c5f2d;
-            font-weight: 600;
-        }
-
-        .toggle-preview-btn {
-            margin-left: 0.5rem;
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 sidebar p-0">
-                <h4><i class="bi bi-book-half me-2"></i>SunnahWay জীবনী ও গল্প</h4>
-                <div class="p-3">
-                    <button class="btn btn-light w-100 mb-3" onclick="showAddCategoryModal()">
-                        <i class="bi bi-plus-circle me-2"></i>নতুন ক্যাটাগরি
-                    </button>
+    <div class="container-fluid p-0">
+
+        <!-- Views -->
+        <div id="categoryView">
+            <div class="main-header">
+                <div>
+                    <h2><i class="bi bi-grid-fill me-2"></i>Categories</h2>
+                    <small class="text-muted">গল্পের ক্যাটাগরি ম্যানেজ করুন</small>
                 </div>
-                <div id="categoryList"></div>
+                <button class="btn btn-primary" onclick="showAddCategoryModal()">
+                    <i class="bi bi-plus-lg me-2"></i>New Category
+                </button>
             </div>
 
-            <!-- Main Content -->
-            <main class="col-md-9 col-lg-10 main-content">
-                <div class="header-bar d-flex justify-content-between align-items-center">
-                    <div>
-                        <h2 class="mb-0" id="categoryTitle">ক্যাটাগরি নির্বাচন করুন</h2>
-                        <small class="text-muted" id="storyCount"></small>
+            <div id="categoryList" class="category-grid">
+                <!-- Categories will be loaded here -->
+                <div class="text-center w-100 py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
-                    <button class="btn btn-primary" onclick="showAddStoryModal()" id="addStoryBtn"
-                        style="display: none;">
-                        <i class="bi bi-plus-lg me-2"></i>নতুন গল্প যোগ করুন
-                    </button>
                 </div>
-
-                <div id="storiesContainer"></div>
-            </main>
+            </div>
         </div>
+
+        <div id="storyView" class="story-list-view">
+            <div class="main-header">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-light border rounded-circle p-2" onclick="showCategoryView()">
+                        <i class="bi bi-arrow-left fs-5"></i>
+                    </button>
+                    <div>
+                        <h2 id="currentCategoryTitle">Category Name</h2>
+                        <small class="text-muted" id="storyCount">0 stories</small>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="showAddStoryModal()">
+                    <i class="bi bi-plus-lg me-2"></i>New Story
+                </button>
+            </div>
+
+            <div id="storiesContainer">
+                <!-- Stories will be loaded here -->
+            </div>
+        </div>
+
     </div>
 
     <!-- Add/Edit Story Modal -->
     <div class="modal fade" id="storyModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="storyModalTitle">নতুন গল্প যোগ করুন</h5>
@@ -193,75 +283,62 @@
                     <input type="hidden" id="storyId">
                     <input type="hidden" id="storyCategoryId">
 
-                    <div class="mb-3">
-                        <label class="form-label">গল্পের ID (ইংরেজিতে, ছোট হাতের অক্ষর)</label>
-                        <input type="text" class="form-control" id="storyIdInput" placeholder="e.g. musa_as_birth">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">শিরোনাম</label>
-                        <input type="text" class="form-control" id="storyTitle" placeholder="গল্পের শিরোনাম">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">সংক্ষিপ্ত বিবরণ</label>
-                        <div class="mb-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary"
-                                onclick="makeBoldField('summaryPreview')">
-                                <i class="bi bi-type-bold"></i> Bold
-                            </button>
-                            <small class="text-muted ms-2">💡 Text select করে Bold করুন অথবা Ctrl+B চাপুন</small>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold text-muted">ID (English)</label>
+                            <input type="text" class="form-control" id="storyIdInput" placeholder="e.g. musa_birth">
                         </div>
-                        <textarea class="form-control" id="storySummary"
-                            oninput="updatePreview('storySummary', 'summaryPreview')" style="display: none;"
-                            placeholder="গল্পের সংক্ষিপ্ত বিবরণ"></textarea>
+                        <div class="col-md-8 mb-3">
+                            <label class="form-label fw-bold text-muted">Title (Bangla)</label>
+                            <input type="text" class="form-control" id="storyTitle" placeholder="গল্পের শিরোনাম">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted">Summary</label>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <small class="text-muted">সংক্ষিপ্ত বিবরণ</small>
+                            <button class="btn btn-sm btn-light border" onclick="makeBoldField('summaryPreview')"><i
+                                    class="bi bi-type-bold"></i> Bold</button>
+                        </div>
+                        <textarea class="form-control d-none" id="storySummary"
+                            oninput="updatePreview('storySummary', 'summaryPreview')"></textarea>
                         <div class="preview-box" id="summaryPreview" contenteditable="true"
-                            oninput="syncFromPreview('summaryPreview', 'storySummary')" onpaste="handlePaste(event)">
-                            এখানে লিখুন...</div>
+                            oninput="syncFromPreview('summaryPreview', 'storySummary')"></div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">মূল গল্প (প্রতিটি প্যারাগ্রাফ আলাদা লাইনে)</label>
-                        <div class="mb-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="makeBold()"
-                                title="Select text and click to make it bold">
-                                <i class="bi bi-type-bold"></i> Bold
-                            </button>
-                            <small class="text-muted ms-2">💡 Text select করে Bold করুন অথবা Ctrl+B চাপুন</small>
+                        <label class="form-label fw-bold text-muted">Main Content</label>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <small class="text-muted">মূল গল্প (প্রতিটি প্যারাগ্রাফ নতুন লাইনে)</small>
+                            <button class="btn btn-sm btn-light border" onclick="makeBoldField('paragraphsPreview')"><i
+                                    class="bi bi-type-bold"></i> Bold</button>
                         </div>
-                        <textarea class="form-control" id="storyParagraphs" rows="15"
-                            oninput="updatePreview('storyParagraphs', 'paragraphsPreview')" style="display: none;"
-                            placeholder="প্রতিটি নতুন লাইনে একটি করে প্যারাগ্রাফ লিখুন...&#10;&#10;উদাহরণ:&#10;প্রথম প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;দ্বিতীয় প্যারাগ্রাফ এখানে লিখুন।&#10;&#10;আরবি টেক্সট:&#10;بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"></textarea>
+                        <textarea class="form-control d-none" id="storyParagraphs" rows="10"
+                            oninput="updatePreview('storyParagraphs', 'paragraphsPreview')"></textarea>
                         <div class="preview-box" id="paragraphsPreview" contenteditable="true"
                             oninput="syncFromPreview('paragraphsPreview', 'storyParagraphs')"
-                            onpaste="handlePaste(event)" style="min-height: 300px;">এখানে লিখুন...</div>
+                            style="min-height: 200px;"></div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">শিক্ষা/নৈতিকতা</label>
-                        <div class="mb-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary"
-                                onclick="makeBoldField('moralPreview')">
-                                <i class="bi bi-type-bold"></i> Bold
-                            </button>
-                            <small class="text-muted ms-2">💡 Text select করে Bold করুন অথবা Ctrl+B চাপুন</small>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold text-muted">Moral / শিক্ষা</label>
+                            <textarea class="form-control d-none" id="storyMoral"
+                                oninput="updatePreview('storyMoral', 'moralPreview')"></textarea>
+                            <div class="preview-box" id="moralPreview" contenteditable="true"
+                                oninput="syncFromPreview('moralPreview', 'storyMoral')"></div>
                         </div>
-                        <textarea class="form-control" id="storyMoral"
-                            oninput="updatePreview('storyMoral', 'moralPreview')" style="display: none;"
-                            placeholder="এই গল্প থেকে কী শিক্ষা পাওয়া যায়"></textarea>
-                        <div class="preview-box" id="moralPreview" contenteditable="true"
-                            oninput="syncFromPreview('moralPreview', 'storyMoral')" onpaste="handlePaste(event)">এখানে
-                            লিখুন...</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">সূত্র (কুরআন/হাদিস)</label>
-                        <input type="text" class="form-control" id="storySource" placeholder="e.g. সূরা ইউসুফ: ৪-১৮">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold text-muted">Source / সূত্র</label>
+                            <input type="text" class="form-control" id="storySource"
+                                placeholder="e.g. সূরা ইউসুফ: ৪-১৮">
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বাতিল</button>
-                    <button type="button" class="btn btn-primary" onclick="saveStory()">সংরক্ষণ করুন</button>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary px-4" onclick="saveStory()">Save Story</button>
                 </div>
             </div>
         </div>
@@ -269,25 +346,25 @@
 
     <!-- Add Category Modal -->
     <div class="modal fade" id="categoryModal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">নতুন ক্যাটাগরি যোগ করুন</h5>
+                    <h5 class="modal-title">New Category</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">ক্যাটাগরি ID (ইংরেজিতে)</label>
-                        <input type="text" class="form-control" id="categoryId" placeholder="e.g. nobider_jiboni">
+                        <label class="form-label fw-bold text-muted">Category ID (English)</label>
+                        <input type="text" class="form-control" id="categoryId" placeholder="e.g. prophets_life">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">ক্যাটাগরির নাম (বাংলায়)</label>
-                        <input type="text" class="form-control" id="categoryTitle" placeholder="e.g. নবীদের জীবনী">
+                        <label class="form-label fw-bold text-muted">Category Title (Bangla)</label>
+                        <input type="text" class="form-control" id="categoryTitleInput" placeholder="e.g. নবীদের জীবনী">
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বাতিল</button>
-                    <button type="button" class="btn btn-primary" onclick="saveCategory()">সংরক্ষণ করুন</button>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary px-4" onclick="saveCategory()">Create Category</button>
                 </div>
             </div>
         </div>
@@ -301,6 +378,19 @@
         let currentCategory = null;
         let currentStories = [];
 
+        // Helper to get random gradient for category cards
+        function getRandomGradient(index) {
+            const gradients = [
+                'linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%)',
+                'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)',
+                'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)',
+                'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)',
+                'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+            ];
+            return gradients[index % gradients.length];
+        }
+
         // Load categories
         async function loadCategories() {
             try {
@@ -309,16 +399,37 @@
                 displayCategories();
             } catch (error) {
                 console.error('Error loading categories:', error);
+                document.getElementById('categoryList').innerHTML = '<div class="text-center text-danger">Failed to load categories</div>';
             }
         }
 
-        // Display categories
+        // Display categories grid
         function displayCategories() {
             const list = document.getElementById('categoryList');
-            list.innerHTML = categories.map(cat => `
-                <div class="category-item ${currentCategory?.id === cat.id ? 'active' : ''}" 
-                     onclick="loadCategory('${cat.id}', '${cat.title}')">
-                    <i class="bi bi-folder me-2"></i>${cat.title}
+            if (categories.length === 0) {
+                list.innerHTML = '<div class="text-center text-muted w-100 py-5">No categories found. Create one!</div>';
+                return;
+            }
+
+            list.innerHTML = categories.map((cat, index) => `
+                <div class="category-card" onclick="loadCategory('${cat.id}', '${cat.title}')">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="category-icon">
+                                <i class="bi bi-folder-fill"></i>
+                            </div>
+                            <div class="category-title">${cat.title}</div>
+                            <div class="category-count">Click to view stories</div>
+                        </div>
+                        <div class="dropdown" onclick="event.stopPropagation()">
+                            <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item text-danger" href="#" onclick="deleteCategory('${cat.id}')"><i class="bi bi-trash me-2"></i>Delete</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             `).join('');
         }
@@ -326,25 +437,43 @@
         // Load category stories
         async function loadCategory(categoryId, categoryTitle) {
             currentCategory = { id: categoryId, title: categoryTitle };
-            document.getElementById('categoryTitle').textContent = categoryTitle;
-            document.getElementById('addStoryBtn').style.display = 'block';
+
+            // Switch view
+            document.getElementById('categoryView').style.display = 'none';
+            document.getElementById('storyView').classList.add('active');
+
+            // Update header
+            document.getElementById('currentCategoryTitle').textContent = categoryTitle;
+            document.getElementById('storyCount').textContent = 'Loading...';
+            document.getElementById('storiesContainer').innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
 
             try {
                 const response = await fetch(`/api/stories/${categoryId}`);
                 currentStories = await response.json();
-                document.getElementById('storyCount').textContent = `${currentStories.length}টি গল্প`;
+                document.getElementById('storyCount').textContent = `${currentStories.length} stories`;
                 displayStories();
-                displayCategories();
             } catch (error) {
                 console.error('Error loading stories:', error);
             }
         }
 
-        // Display stories
+        // Show category view (Back button)
+        function showCategoryView() {
+            document.getElementById('storyView').classList.remove('active');
+            document.getElementById('categoryView').style.display = 'block';
+            currentCategory = null;
+        }
+
+        // Display stories list
         function displayStories() {
             const container = document.getElementById('storiesContainer');
             if (currentStories.length === 0) {
-                container.innerHTML = '<div class="text-center text-muted p-5">কোনো গল্প নেই। নতুন গল্প যোগ করুন।</div>';
+                container.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="bi bi-journal-bookmark fs-1 text-muted mb-3 d-block"></i>
+                        <h5 class="text-muted">No stories yet</h5>
+                        <p class="text-muted small">Click "New Story" to add one.</p>
+                    </div>`;
                 return;
             }
 
@@ -352,15 +481,18 @@
                 <div class="story-card">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="flex-grow-1">
-                            <h5 class="mb-2">${story.title}</h5>
-                            <p class="text-muted mb-2">${story.summary || ''}</p>
-                            <small class="text-primary"><i class="bi bi-book me-1"></i>${story.source || ''}</small>
+                            <h5 class="story-title">${story.title}</h5>
+                            <p class="story-summary">${story.summary || 'No summary'}</p>
+                            <div class="d-flex gap-3">
+                                <small class="text-muted"><i class="bi bi-hash me-1"></i>${story.id}</small>
+                                <small class="text-primary"><i class="bi bi-book me-1"></i>${story.source || 'No source'}</small>
+                            </div>
                         </div>
-                        <div class="story-actions">
-                            <button class="btn btn-sm btn-outline-primary" onclick='editStory(${JSON.stringify(story).replace(/'/g, "&apos;")})'>
+                        <div class="d-flex gap-2 ms-3">
+                            <button class="btn btn-light border text-primary" onclick='editStory(${JSON.stringify(story).replace(/'/g, "&apos;")})'>
                                 <i class="bi bi-pencil"></i>
                             </button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteStory('${story.id}')">
+                            <button class="btn btn-light border text-danger" onclick="deleteStory('${story.id}')">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -371,12 +503,7 @@
 
         // Show add story modal
         function showAddStoryModal() {
-            if (!currentCategory) {
-                Swal.fire('সতর্কতা', 'প্রথমে একটি ক্যাটাগরি নির্বাচন করুন', 'warning');
-                return;
-            }
-
-            document.getElementById('storyModalTitle').textContent = 'নতুন গল্প যোগ করুন';
+            document.getElementById('storyModalTitle').textContent = 'Add New Story';
             document.getElementById('storyId').value = '';
             document.getElementById('storyCategoryId').value = currentCategory.id;
             document.getElementById('storyIdInput').value = '';
@@ -387,16 +514,16 @@
             document.getElementById('storySource').value = '';
 
             // Clear previews
-            document.getElementById('summaryPreview').innerHTML = 'এখানে লিখুন...';
-            document.getElementById('paragraphsPreview').innerHTML = 'এখানে লিখুন...';
-            document.getElementById('moralPreview').innerHTML = 'এখানে লিখুন...';
+            document.getElementById('summaryPreview').innerHTML = '';
+            document.getElementById('paragraphsPreview').innerHTML = '';
+            document.getElementById('moralPreview').innerHTML = '';
 
             new bootstrap.Modal(document.getElementById('storyModal')).show();
         }
 
         // Edit story
         function editStory(story) {
-            document.getElementById('storyModalTitle').textContent = 'গল্প সম্পাদনা করুন';
+            document.getElementById('storyModalTitle').textContent = 'Edit Story';
             document.getElementById('storyId').value = story.id;
             document.getElementById('storyCategoryId').value = story.categoryId;
             document.getElementById('storyIdInput').value = story.id;
@@ -405,10 +532,8 @@
             document.getElementById('storyMoral').value = story.moral || '';
             document.getElementById('storySource').value = story.source || '';
 
-            // Join paragraphs with newlines
             document.getElementById('storyParagraphs').value = (story.paragraphs || []).join('\n');
 
-            // Update previews with formatted content
             updatePreview('storySummary', 'summaryPreview');
             updatePreview('storyParagraphs', 'paragraphsPreview');
             updatePreview('storyMoral', 'moralPreview');
@@ -425,12 +550,11 @@
             const moral = document.getElementById('storyMoral').value.trim();
             const source = document.getElementById('storySource').value.trim();
 
-            // Split paragraphs by newlines and filter empty ones
             const paragraphsText = document.getElementById('storyParagraphs').value;
             const paragraphs = paragraphsText.split('\n').filter(p => p.trim());
 
             if (!id || !title) {
-                Swal.fire('ত্রুটি', 'ID এবং শিরোনাম আবশ্যক', 'error');
+                Swal.fire('Error', 'ID and Title are required', 'error');
                 return;
             }
 
@@ -445,7 +569,7 @@
             };
 
             try {
-                Swal.fire({ title: 'সংরক্ষণ হচ্ছে...', didOpen: () => Swal.showLoading() });
+                Swal.fire({ title: 'Saving...', didOpen: () => Swal.showLoading() });
 
                 const response = await fetch(`/api/stories/${categoryId}`, {
                     method: 'POST',
@@ -454,50 +578,43 @@
                 });
 
                 if (response.ok) {
-                    // Push to GitHub
                     await fetch('/api/push', { method: 'POST' });
-
-                    Swal.fire('সফল', 'গল্প সংরক্ষিত এবং GitHub এ পুশ হয়েছে', 'success');
+                    Swal.fire('Saved!', 'Story saved and pushed to GitHub', 'success');
                     bootstrap.Modal.getInstance(document.getElementById('storyModal')).hide();
                     loadCategory(categoryId, currentCategory.title);
                 } else {
                     throw new Error('Failed to save');
                 }
             } catch (error) {
-                Swal.fire('ত্রুটি', 'গল্প সংরক্ষণ করতে সমস্যা হয়েছে', 'error');
+                Swal.fire('Error', 'Failed to save story', 'error');
             }
         }
 
         // Delete story
         async function deleteStory(storyId) {
             const result = await Swal.fire({
-                title: 'নিশ্চিত করুন',
-                text: 'এই গল্পটি মুছে ফেলতে চান?',
+                title: 'Are you sure?',
+                text: 'This will delete the story permanently.',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'হ্যাঁ, মুছে ফেলুন',
-                cancelButtonText: 'বাতিল'
+                confirmButtonText: 'Yes, delete it'
             });
 
             if (result.isConfirmed) {
                 try {
-                    Swal.fire({ title: 'মুছে ফেলা হচ্ছে...', didOpen: () => Swal.showLoading() });
-
+                    Swal.fire({ title: 'Deleting...', didOpen: () => Swal.showLoading() });
                     const response = await fetch(`/api/stories/${currentCategory.id}/${storyId}`, {
                         method: 'DELETE'
                     });
 
                     if (response.ok) {
-                        // Push to GitHub
                         await fetch('/api/push', { method: 'POST' });
-
-                        Swal.fire('মুছে ফেলা হয়েছে', 'গল্পটি মুছে ফেলা হয়েছে এবং GitHub এ পুশ হয়েছে', 'success');
+                        Swal.fire('Deleted!', 'Story deleted', 'success');
                         loadCategory(currentCategory.id, currentCategory.title);
                     }
                 } catch (error) {
-                    Swal.fire('ত্রুটি', 'গল্প মুছতে সমস্যা হয়েছে', 'error');
+                    Swal.fire('Error', 'Failed to delete', 'error');
                 }
             }
         }
@@ -505,23 +622,22 @@
         // Show add category modal
         function showAddCategoryModal() {
             document.getElementById('categoryId').value = '';
-            document.getElementById('categoryTitle').value = '';
+            document.getElementById('categoryTitleInput').value = '';
             new bootstrap.Modal(document.getElementById('categoryModal')).show();
         }
 
         // Save category
         async function saveCategory() {
             const id = document.getElementById('categoryId').value.trim();
-            const title = document.getElementById('categoryTitle').value.trim();
+            const title = document.getElementById('categoryTitleInput').value.trim();
 
             if (!id || !title) {
-                Swal.fire('ত্রুটি', 'ID এবং নাম আবশ্যক', 'error');
+                Swal.fire('Error', 'ID and Title are required', 'error');
                 return;
             }
 
             try {
-                Swal.fire({ title: 'সংরক্ষণ হচ্ছে...', didOpen: () => Swal.showLoading() });
-
+                Swal.fire({ title: 'Creating...', didOpen: () => Swal.showLoading() });
                 const response = await fetch('/api/categories', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -529,210 +645,91 @@
                 });
 
                 if (response.ok) {
-                    // Push to GitHub
                     await fetch('/api/push', { method: 'POST' });
-
-                    Swal.fire('সফল', 'ক্যাটাগরি সংরক্ষিত এবং GitHub এ পুশ হয়েছে', 'success');
+                    Swal.fire('Success', 'Category created', 'success');
                     bootstrap.Modal.getInstance(document.getElementById('categoryModal')).hide();
                     loadCategories();
                 }
             } catch (error) {
-                Swal.fire('ত্রুটি', 'ক্যাটাগরি সংরক্ষণ করতে সমস্যা হয়েছে', 'error');
+                Swal.fire('Error', 'Failed to create category', 'error');
             }
         }
 
-        // Make selected text bold in any field (works with contenteditable)
+        // Delete category
+        async function deleteCategory(id) {
+            const result = await Swal.fire({
+                title: 'Delete Category?',
+                text: 'This will delete the category and all its stories!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it'
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    Swal.fire({ title: 'Deleting...', didOpen: () => Swal.showLoading() });
+                    const response = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
+                    if (response.ok) {
+                        await fetch('/api/push', { method: 'POST' });
+                        Swal.fire('Deleted', 'Category deleted', 'success');
+                        loadCategories();
+                    }
+                } catch (error) {
+                    Swal.fire('Error', 'Failed to delete category', 'error');
+                }
+            }
+        }
+
+        // Rich Text Logic
         function makeBoldField(fieldId) {
             const field = document.getElementById(fieldId);
+            field.focus();
+            document.execCommand('bold', false, null);
 
-            // Check if it's a contenteditable preview box
-            if (field.contentEditable === 'true') {
-                // Focus the field first
-                field.focus();
-
-                // Check if there's a selection
-                const selection = window.getSelection();
-                if (!selection.toString()) {
-                    Swal.fire('সতর্কতা', 'প্রথমে টেক্সট সিলেক্ট করুন', 'warning');
-                    return;
-                }
-
-                // Toggle bold using execCommand
-                document.execCommand('bold', false, null);
-
-                // Sync to textarea
-                const previewMap = {
-                    'summaryPreview': 'storySummary',
-                    'paragraphsPreview': 'storyParagraphs',
-                    'moralPreview': 'storyMoral'
-                };
-
-                if (previewMap[fieldId]) {
-                    syncFromPreview(fieldId, previewMap[fieldId]);
-                }
-            } else {
-                // For textarea (old method)
-                const textarea = field;
-                const start = textarea.selectionStart;
-                const end = textarea.selectionEnd;
-                const selectedText = textarea.value.substring(start, end);
-
-                if (!selectedText) {
-                    Swal.fire('সতর্কতা', 'প্রথমে টেক্সট সিলেক্ট করুন', 'warning');
-                    return;
-                }
-
-                // Check if the selected text itself contains ** markers
-                if (selectedText.startsWith('**') && selectedText.endsWith('**') && selectedText.length > 4) {
-                    // Remove bold from the selected text
-                    const newText = textarea.value.substring(0, start) +
-                        selectedText.substring(2, selectedText.length - 2) +
-                        textarea.value.substring(end);
-                    textarea.value = newText;
-                    textarea.setSelectionRange(start, end - 4);
-                } else {
-                    // Check if already surrounded by **
-                    const beforeText = textarea.value.substring(Math.max(0, start - 2), start);
-                    const afterText = textarea.value.substring(end, Math.min(textarea.value.length, end + 2));
-
-                    if (beforeText === '**' && afterText === '**') {
-                        // Remove bold
-                        const newText = textarea.value.substring(0, start - 2) +
-                            selectedText +
-                            textarea.value.substring(end + 2);
-                        textarea.value = newText;
-                        textarea.setSelectionRange(start - 2, end - 2);
-                    } else {
-                        // Add bold
-                        const newText = textarea.value.substring(0, start) +
-                            '**' + selectedText + '**' +
-                            textarea.value.substring(end);
-                        textarea.value = newText;
-                        textarea.setSelectionRange(start, end + 4);
-                    }
-                }
-
-                textarea.focus();
-
-                // Update preview
-                const previewMap = {
-                    'storySummary': 'summaryPreview',
-                    'storyParagraphs': 'paragraphsPreview',
-                    'storyMoral': 'moralPreview'
-                };
-                if (previewMap[fieldId]) {
-                    updatePreview(fieldId, previewMap[fieldId]);
-                }
-            }
+            const previewMap = {
+                'summaryPreview': 'storySummary',
+                'paragraphsPreview': 'storyParagraphs',
+                'moralPreview': 'storyMoral'
+            };
+            if (previewMap[fieldId]) syncFromPreview(fieldId, previewMap[fieldId]);
         }
 
-        // Remove bold from selected text (deprecated - now using toggle)
-        function removeBoldField(fieldId) {
-            // Just call makeBoldField which now toggles
-            makeBoldField(fieldId);
-        }
-
-        // Make selected text bold (for paragraphs field - backward compatibility)
-        function makeBold() {
-            makeBoldField('paragraphsPreview');
-        }
-
-        // Format text to convert markdown bold to HTML
         function formatText(text) {
-            if (!text) return 'এখানে preview দেখাবে...';
-            // Convert **bold** to <strong>bold</strong>
+            if (!text) return '';
             return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         }
 
-        // Update preview box
         function updatePreview(textareaId, previewId) {
             const textarea = document.getElementById(textareaId);
             const preview = document.getElementById(previewId);
             const text = textarea.value;
 
-            if (!text.trim()) {
-                preview.innerHTML = 'এখানে লিখুন...';
-                return;
-            }
-
-            // For paragraphs, show each paragraph
             if (textareaId === 'storyParagraphs') {
                 const paragraphs = text.split('\n').filter(p => p.trim());
-                preview.innerHTML = paragraphs.map(p => `<p style="margin-bottom: 0.5rem;">${formatText(p)}</p>`).join('');
+                preview.innerHTML = paragraphs.map(p => `<p>${formatText(p)}</p>`).join('');
             } else {
                 preview.innerHTML = formatText(text);
             }
         }
 
-        // Sync from preview box to textarea (HTML to Markdown)
         function syncFromPreview(previewId, textareaId) {
             const preview = document.getElementById(previewId);
             const textarea = document.getElementById(textareaId);
-
-            // Convert HTML to markdown
             let html = preview.innerHTML;
 
-            // Convert <strong> to **
             html = html.replace(/<strong>(.*?)<\/strong>/g, '**$1**');
             html = html.replace(/<b>(.*?)<\/b>/g, '**$1**');
 
-            // Convert <p> tags to newlines for paragraphs
             if (textareaId === 'storyParagraphs') {
                 html = html.replace(/<p[^>]*>(.*?)<\/p>/g, '$1\n');
             }
 
-            // Remove other HTML tags
             html = html.replace(/<[^>]+>/g, '');
 
-            // Decode HTML entities
             const txt = document.createElement('textarea');
             txt.innerHTML = html;
-            const decoded = txt.value;
-
-            textarea.value = decoded.trim();
-        }
-
-        // Handle paste to keep only text
-        function handlePaste(event) {
-            event.preventDefault();
-            const text = (event.clipboardData || window.clipboardData).getData('text/plain');
-            document.execCommand('insertText', false, text);
-        }
-
-        // Add keyboard shortcut for bold (Ctrl+B)
-        document.addEventListener('keydown', function (e) {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
-                const activeElement = document.activeElement;
-                if (activeElement.classList.contains('preview-box') && activeElement.contentEditable === 'true') {
-                    e.preventDefault();
-                    document.execCommand('bold', false, null);
-                }
-            }
-        });
-
-        // Toggle all preview boxes
-        let previewsVisible = true;
-        function toggleAllPreviews() {
-            previewsVisible = !previewsVisible;
-            const previews = document.querySelectorAll('.preview-box, .preview-label');
-            const icon = document.getElementById('previewToggleIcon');
-            const text = document.getElementById('previewToggleText');
-
-            previews.forEach(preview => {
-                if (previewsVisible) {
-                    preview.classList.remove('hidden');
-                } else {
-                    preview.classList.add('hidden');
-                }
-            });
-
-            if (previewsVisible) {
-                icon.className = 'bi bi-eye';
-                text.textContent = 'Preview Hide';
-            } else {
-                icon.className = 'bi bi-eye-slash';
-                text.textContent = 'Preview Show';
-            }
+            textarea.value = txt.value.trim();
         }
 
         // Initialize
